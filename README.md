@@ -42,6 +42,9 @@ A Django-based to-do application with a REST API for managing tasks. Built as a 
 2. Stop the container
    ```bash
    docker compose down
+Note: On Fedora, ensure SELinux allows file access:
+1. ```bash
+   chcon -R -t container_file_t .
 ### API Usage
 1. List tasks: GET /api/tasks/
 2. Create Tasks:POST /api/tasks/
