@@ -63,6 +63,27 @@ Run unit test with pytest
 1. ```bash
    pytest
 
+### Troubleshooting
+If you encounter a Permission denied error when running docker compose up (e.g., python: can't open file '/app/manage.py': [Errno 13] Permission denied), try these steps:
+1. Ensure manage.py is executable
+   ```bash
+   ls -l manage.py
+   chmod +x manage.py
+2. Set the correct SELinux for Docker
+   ```bash
+   chcon -R -t container_file_t .
+3. Test Without Volume Mount: Edit docker-compose.yml to comment out the volume mount and then run
+   ```bash
+   docker compose down
+   docker compose build
+   docker compose up
+4. Update Dockerfile to use a non-root user matching your host’s UID/GID (e.g., 1000:1000):
+   ```bash
+   ARG UID=1000
+   ARG GID=1000
+   RUN groupadd -g ${GID} appuser && useradd -u ${UID} -g ${GID} -m appuser
+   USER appuser
+5. Rebuild and Run the docker
 
 ### Project Structure
 1. manage.py: Django management script.
